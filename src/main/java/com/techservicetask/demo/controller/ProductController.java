@@ -49,7 +49,7 @@ public class ProductController {
         return ResponseEntity.badRequest().build();
     }
 
-    @PutMapping("/update?id=")
+    @PutMapping
     public ResponseEntity<Product> updateProduct(@RequestParam Long id, @RequestBody Product productFromBody) {
         if (productFromBody != null) {
             productFromBody.setName(productFromBody.getName());
