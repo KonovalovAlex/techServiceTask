@@ -22,8 +22,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void removeProduct(Product product) {
-        productRepository.delete(product);
+    public void removeProduct(Long id) {
+        productRepository.deleteById(id);
     }
 
     @Override
@@ -31,7 +31,7 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.save(product);
     }
 
-    public List<Product> findProductsIsLess5(Integer value) {
+    public List<Product> findProductsIsLess5(Long value) {
         return productRepository.findByQuantityIsLessThan(value);
     }
 

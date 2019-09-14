@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface ProductRepository extends CrudRepository<Product, Long> {
-    List<Product> findByQuantityIsLessThan(Integer quantity);
+    List<Product> findByQuantityIsLessThan(Long value);
 }

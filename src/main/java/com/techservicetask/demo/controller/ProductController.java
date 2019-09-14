@@ -1,5 +1,6 @@
 package com.techservicetask.demo.controller;
 
+import com.techservicetask.demo.controller.exception.customException.CustomException;
 import com.techservicetask.demo.entity.Product;
 import com.techservicetask.demo.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,45 +10,47 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController(value = "/product")
 public class ProductController {
 
-    @Autowired
-    private ProductService productService;
-    @Value("${jwt.header}")
-    private String tokenHeader;
-    private Product product;
+    private final ProductService productService;
 
-    @GetMapping(value = "/show/{value}")
-//    @ExceptionHandler(CustomException.class)
-    public ResponseEntity<List<Product>> showProducts(@PathVariable("value") Integer value) {
-       List<Product> list = productService.findProductsIsLess5(value);
+    @Autowired
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
+
+
+    @GetMapping
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity<List<Product>> showProducts(@RequestParam Long less) {
+       List<Product> list = productService.findProductsIsLess5(less);
        return ResponseEntity.ok(list);
     }
 
     //need fix
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
- //   @ExceptionHandler(CustomException.class)
-    public ResponseEntity.BodyBuilder addProduct(@RequestBody Product productFromBody) {
+    public ResponseEntity<?> addProduct(@RequestBody Product productFromBody) {
         if (productFromBody != null) {
             Product product = new Product();
             product.setName(productFromBody.getName());
             product.setBrand(productFromBody.getBrand());
             product.setPrice(productFromBody.getPrice());
             product.setQuantity(productFromBody.getQuantity());
-            productService.addProduct(product);
-            return ResponseEntity.status(HttpStatus.CREATED);
+            product = productService.addProduct(product);
+            return ResponseEntity.ok(product);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
+        return ResponseEntity.badRequest().build();
     }
 
-    //need fix
-    @DeleteMapping
-    public void removeProduct(@RequestBody Product product){
-        productService.removeProduct(product);
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping(value = "/{id}")
+    public void removeProduct(@PathVariable @Min(1) Long id){
+        productService.removeProduct(id);
     }
 
 
