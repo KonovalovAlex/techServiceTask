@@ -11,7 +11,6 @@ import java.util.List;
 
 
 @Service
-@Scope("prototype")
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
@@ -31,7 +30,7 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.save(product);
     }
 
-    public List<Product> findProductsIsLess5(Long value) {
+    public List<Product> findProductsIsLess(Long value) {
         return productRepository.findByQuantityIsLessThan(value);
     }
 

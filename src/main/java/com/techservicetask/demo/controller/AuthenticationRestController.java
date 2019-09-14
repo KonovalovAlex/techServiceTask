@@ -1,7 +1,7 @@
 package com.techservicetask.demo.controller;
 
 
-import com.techservicetask.demo.controller.exception.customException.CustomException;
+import com.techservicetask.demo.controller.customException.CustomException;
 import com.techservicetask.demo.jwtAuthentication.JwtAuthenticationRequest;
 import com.techservicetask.demo.jwtAuthentication.JwtAuthenticationResponse;
 import com.techservicetask.demo.jwtAuthentication.JwtUser;

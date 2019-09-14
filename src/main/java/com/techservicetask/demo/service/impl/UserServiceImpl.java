@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Scope("prototype")
 public class UserServiceImpl implements UserService {
 
     protected final UserRepository userRepository;
@@ -21,14 +21,12 @@ public class UserServiceImpl implements UserService {
 
     private User user;
 
-
-    @Transactional
     @Override
     public User saveOrUpdate(User user) {
         return userRepository.save(user);
     }
 
-    @Transactional
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public User registr(User user) throws ServiceException {
         this.user = user;
         user = userRepository.findByUsername(user.getUsername());

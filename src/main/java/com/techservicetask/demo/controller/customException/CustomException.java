@@ -1,4 +1,4 @@
-package com.techservicetask.demo.controller.exception.customException;
+package com.techservicetask.demo.controller.customException;
 
 public class CustomException extends RuntimeException {
     public CustomException(String message) {

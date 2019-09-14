@@ -35,7 +35,7 @@ public class User extends AbstractEntity  {
     @NotNull
     private Date lastPasswordResetDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "users")
     @JsonBackReference
     private Role role;
