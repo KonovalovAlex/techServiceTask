@@ -71,6 +71,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
                 .antMatchers("/registrate","/login","/h2").permitAll()
+                .antMatchers("/product/**").hasAnyAuthority("ROLE_ADMIN","ROLE_USER")
+                .anyRequest().authenticated()
                 .and()
                 .httpBasic();
         FilterToken authenticationFilterToken = new FilterToken(userDetailsService(), jwtTokenUtil, tokenHeader);

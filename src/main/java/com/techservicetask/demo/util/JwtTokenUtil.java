@@ -4,6 +4,7 @@ import com.techservicetask.demo.jwtAuthentication.JwtUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Component
+@Setter
 public class JwtTokenUtil implements Serializable {
 
     private static final long serialVersionUID = -3301605591108950415L;
@@ -112,7 +114,7 @@ public class JwtTokenUtil implements Serializable {
     }
 
     private Date calculateExpirationDate(Date createdDate) {
-        return new Date(createdDate.getTime() + expiration * 555);
+        return new Date(createdDate.getTime() + expiration * 1000);
     }
     private Date getCurrentTime(){
         return new Date();

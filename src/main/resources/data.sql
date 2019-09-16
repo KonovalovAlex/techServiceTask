@@ -5,3 +5,5 @@ insert into product (ID, name, brand , price, quantity) VALUES (2,'1cristian','1
 insert into product (ID, name, brand , price, quantity) VALUES (3,'2cristian','2dior','1000', 3);
 insert into product (ID, name, brand , price, quantity) VALUES (4,'3cristian','3dior','1000', 7);
 insert into product (ID, name, brand , price, quantity) VALUES (5,'4cristian','4dior','1000', 2);
+insert into product (ID, name, brand , price, quantity) VALUES (5,'4cristian','4dior','1000', 5);
+insert into product (ID, name, brand , price, quantity) VALUES (5,'4cristian','4dior','1000', 4);

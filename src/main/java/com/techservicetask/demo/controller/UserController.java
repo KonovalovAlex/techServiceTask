@@ -7,6 +7,7 @@ import com.techservicetask.demo.service.JwtUserService;
 import com.techservicetask.demo.service.RoleService;
 import com.techservicetask.demo.service.UserService;
 import com.techservicetask.demo.util.JwtTokenUtil;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -16,18 +17,25 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 
 @RestController
-public class UserRestController {
+@Setter
+public class UserController {
 
-    @Value("${jwt.header}")
-    private String tokenHeader;
-    //    @Value("${roleName}")
-    private String roleName = "ROLE_USER";
+    @Value("${role_user}")
+    private String roleName;
     private User user;
     private Role role;
     private final UserService userService;
     private final RoleService roleService;
     private final JwtTokenUtil jwtTokenUtil;
     private final JwtUserService jwtUserService;
+
+    @Autowired
+    public UserController(UserService userService, RoleService roleService, JwtTokenUtil jwtTokenUtil, JwtUserService jwtUserService) {
+        this.userService = userService;
+        this.roleService = roleService;
+        this.jwtTokenUtil = jwtTokenUtil;
+        this.jwtUserService = jwtUserService;
+    }
 
 
     @RequestMapping(value = "/registrate", method = RequestMethod.POST)
@@ -41,7 +49,7 @@ public class UserRestController {
     }
 
     private User initEntity(User namePassword) {
-        role = roleService.findUserRole(roleName);
+        role = roleService.findRole(roleName);
         user = new User();
         user.setLastPasswordResetDate(getCurrentTime());
         user.setUsername(namePassword.getUsername());
@@ -52,7 +60,6 @@ public class UserRestController {
     }
 
 
-
     private boolean checkCredentials(User user) {
         user = userService.findByUserName(user.getUsername());
         return user != null;
@@ -60,14 +67,6 @@ public class UserRestController {
 
     private Date getCurrentTime() {
         return new Date();
-    }
-
-    @Autowired
-    public UserRestController(UserService userService, RoleService roleService, JwtTokenUtil jwtTokenUtil, JwtUserService jwtUserService) {
-        this.userService = userService;
-        this.roleService = roleService;
-        this.jwtTokenUtil = jwtTokenUtil;
-        this.jwtUserService = jwtUserService;
     }
 }
 

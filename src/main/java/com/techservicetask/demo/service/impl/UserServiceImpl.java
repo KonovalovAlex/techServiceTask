@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -21,12 +22,19 @@ public class UserServiceImpl implements UserService {
 
     private User user;
 
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.userRepository = userRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     @Override
     public User saveOrUpdate(User user) {
         return userRepository.save(user);
     }
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRES_NEW)
     public User registr(User user) throws ServiceException {
         this.user = user;
         user = userRepository.findByUsername(user.getUsername());
@@ -54,11 +62,5 @@ public class UserServiceImpl implements UserService {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.userRepository = userRepository;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 }

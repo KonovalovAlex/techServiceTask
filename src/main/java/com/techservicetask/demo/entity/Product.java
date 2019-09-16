@@ -13,15 +13,16 @@ import javax.validation.constraints.Size;
 @Setter
 @NoArgsConstructor
 public class Product extends AbstractEntity {
-    @Size(min = 1,max = 20)
+    @Size(max = 20)
     @NotNull
     private String name;
+    @Size(max = 20)
     @NotNull
-    @Size(min = 1,max = 20)
     private String brand;
-    @Size(min = 1,max = 20)
+    @Size(max = 20)
     @NotNull
     private String price;
+    @Size(max = 20)
     @NotNull
     private Long quantity;
 

@@ -13,6 +13,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +30,7 @@ public class JwtUserServiceImpl implements JwtUserService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
         User user = userService.findByUserName(name);
         if (user == null) {

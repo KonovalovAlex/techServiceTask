@@ -4,6 +4,10 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.FetchProfile;
+import org.hibernate.annotations.FetchProfiles;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -14,7 +18,11 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
+@FetchProfile(name = User.USER_WITH_ROLE, fetchOverrides = @FetchProfile.FetchOverride(entity = User.class,
+        association = "role", mode = FetchMode.JOIN))
 public class User extends AbstractEntity  {
+
+    public static final String USER_WITH_ROLE = "user-with-role";
 
     @Column(name = "USERNAME", length = 50, unique = true)
     @NotNull
@@ -35,7 +43,7 @@ public class User extends AbstractEntity  {
     @NotNull
     private Date lastPasswordResetDate;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "users")
     @JsonBackReference
     private Role role;

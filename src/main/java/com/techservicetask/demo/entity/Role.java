@@ -20,7 +20,7 @@ public class Role extends AbstractEntity {
     @Column(name="ROLE")
     private String role;
 
-    @OneToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER, mappedBy = "role", orphanRemoval = true)
+    @OneToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY, mappedBy = "role", orphanRemoval = true)
     @Fetch(FetchMode.SUBSELECT)
     @JsonManagedReference
     private Set<User> users;

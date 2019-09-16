@@ -30,10 +30,6 @@ public class JwtUser extends User implements UserDetails {
         this.lastPasswordResetDate = lastPasswordResetDate;
     }
 
-    @JsonIgnore
-    public Long takeId() {
-        return getId();
-    }
 
     @Override
     public String getUsername() {

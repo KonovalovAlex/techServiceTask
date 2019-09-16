@@ -1,6 +1,7 @@
 package com.techservicetask.demo.controller;
 
 
+import com.techservicetask.demo.controller.customException.AuthenticationException;
 import com.techservicetask.demo.controller.customException.CustomException;
 import com.techservicetask.demo.jwtAuthentication.JwtAuthenticationRequest;
 import com.techservicetask.demo.jwtAuthentication.JwtAuthenticationResponse;
@@ -22,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 
 @RestController
-public class AuthenticationRestController {
+public class AuthenticationController {
 
     @Value("${jwt.header}")
     private String tokenHeader;
@@ -42,7 +43,7 @@ public class AuthenticationRestController {
     @RequestMapping(value = "/refresh", method = RequestMethod.GET)
     public ResponseEntity<?> refreshAndGetAuthenticationToken(HttpServletRequest request) {
         String authToken = request.getHeader(tokenHeader);
-        final String token = authToken.substring(7);
+        final String token = authToken.substring(6);
         String username = jwtTokenUtil.getUsernameFromToken(token);
         JwtUser user = (JwtUser) jwtUserService.loadUserByUsername(username);
 
@@ -54,7 +55,7 @@ public class AuthenticationRestController {
         }
     }
 
-    @ExceptionHandler(CustomException.class)
+    @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<String> handleAuthenticationException(CustomException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
@@ -66,14 +67,14 @@ public class AuthenticationRestController {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {
-            throw new CustomException("User is disabled!", e);
+            throw new AuthenticationException("User is disabled!", e);
         } catch (BadCredentialsException e) {
-            throw new CustomException("Bad credentials!", e);
+            throw new AuthenticationException("Bad credentials!", e);
         }
     }
 
     @Autowired
-    public AuthenticationRestController(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil, JwtUserService jwtUserService) {
+    public AuthenticationController(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil, JwtUserService jwtUserService) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
         this.jwtUserService = jwtUserService;
