@@ -2,7 +2,6 @@ package com.techservicetask.demo.controller;
 
 
 import com.techservicetask.demo.controller.customException.AuthenticationException;
-import com.techservicetask.demo.controller.customException.CustomException;
 import com.techservicetask.demo.jwtAuthentication.JwtAuthenticationRequest;
 import com.techservicetask.demo.jwtAuthentication.JwtAuthenticationResponse;
 import com.techservicetask.demo.jwtAuthentication.JwtUser;
@@ -32,7 +31,7 @@ public class AuthenticationController {
     private final JwtUserService jwtUserService;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest) throws CustomException {
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest) throws AuthenticationException {
 
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
         final UserDetails userDetails = jwtUserService.loadUserByUsername(authenticationRequest.getUsername());
@@ -56,7 +55,7 @@ public class AuthenticationController {
     }
 
     @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<String> handleAuthenticationException(CustomException e) {
+    public ResponseEntity<String> handleAuthenticationException(AuthenticationException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
 
